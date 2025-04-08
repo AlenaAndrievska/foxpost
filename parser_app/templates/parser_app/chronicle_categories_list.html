@@ -1,0 +1,31 @@
+{% extends 'parser_app/base.html' %}
+
+{% block title%}Хроника{% endblock %}
+
+{% block content %}
+
+<div class="chronicle-cat__container container">
+    {% if chronic_categories_list %}
+        <ul class="chronicle-cat__list">
+        {% for chronicle in chronic_categories_list %}
+            <div class="card chronicle-cat__item">
+                <a class="card ard chronicle-cat__link" href="/articles/chronicle/{{ chronicle.slug }}/">
+                    <img class="card-img" src="{{ chronicle.photo }}">
+                </a>
+                <div class="card ard chronicle-cat__text">
+                    <a class="card chronicle-cat__text-link"  href="/articles/chronicle/{{ chronicle.slug }}/">
+                        <h5 class="card chronicle-cat__text-title">
+                            {{ chronicle.name }}
+                        </h5>
+                    </a>
+                    <p class="card chronicle-cat__text-text">
+                        {{ chronicle.description }}
+                    </p>
+                </div>
+            </div>
+        {% endfor %}
+        </ul>
+    {% endif %}
+</div>
+
+{% endblock %}

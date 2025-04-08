@@ -1,0 +1,40 @@
+{% load static %}
+
+<a class="card" href="/articles/chronicle/">
+    <div class="chronicle__title">
+        <h1 class="chronicle__title-1">
+            ХРОНИКА
+        </h1>
+    </div>
+</a>
+
+<div class="row ml-0 mr-0 chronicle__elem">
+    {% if chronic_categories_list %}
+        <ul class="chronicle__list">
+            {% for chronicle in chronic_categories_list|slice:":4"|slice:":2" %}
+                <li class="col-md-3 chronicle__vis">
+                    <a class="card" href="/articles/chronicle/{{ chronicle.slug }}/">
+                        <div class="card">
+                            <img class="card-img" src="{{ chronicle.photo }}" alt="">
+                            <h5 class="chronicle__item">
+                                {{ chronicle.name }}
+                            </h5>
+                        </div>
+                    </a>
+                </li>
+            {% endfor %}
+            {% for chronicle in chronic_categories_list|slice:":4"|slice:"2:" %}
+                <li class="col-md-3 chronicle__hidden">
+                    <a class="card" href="/articles/chronicle/{{ chronicle.slug }}/">
+                        <div class="card">
+                            <img class="card-img" src="{{ chronicle.photo }}" alt="">
+                            <h5 class="chronicle__item">
+                                {{ chronicle.name }}
+                            </h5>
+                        </div>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</div>

@@ -1,0 +1,129 @@
+{% extends 'parser_app/base.html' %}
+{% load new_tags %}
+
+{% block title%}{{ chronicle.name }}{% endblock %}
+
+{% block content %}
+
+
+<div class="chronic_list container main__container">
+    <div class="card chronic_list__card">
+        <img class="card-img chronic_list__card-img" src="{{ chronicle.photo }}">
+        <div class="chronic_list__card-text">
+            <h5 class="chronic_list__card-title">
+                {{ chronicle.name }}
+            </h5>
+            <p class="chronic_list__card-descr">
+                {{ chronicle.description }}
+            </p>
+        </div>
+    </div>
+</div>
+
+  <div class="container main__container">
+      <div class="jumbotron">
+        <h1 class="chronic_list__title">
+            Хронология событий
+        </h1>
+      </div>
+      <div class="main__container-content">
+        <div class="main__container-list">
+          {% if chronicle_articles_list %}
+            {% for article in chronicle_articles_list %}
+                {% if forloop.first %}
+                    <p class="chronic_list__date">{{ article.created_at|date:"d E" }}</p>
+                {% else %}
+                    {% with previous_article=chronicle_articles_list|prev:article %}
+                            {% if previous_article.created_at|date:"d E" != article.created_at|date:"d E" %}
+                                <p class="chronic_list__date">{{ article.created_at|date:"d E" }}</p>
+                            {% endif %}
+                    {% endwith %}
+                {% endif %}
+                <ul class="chronic_list__list">
+                    <li>
+                        <div class="main__container-item">
+                            <div class="main__container-item-time">
+                                <p>{{ article.created_at|date:"H:i" }}</p>
+                                <p class="main__container-item-date">{{ article.created_at|date:"Y.m.d" }}</p>
+                            </div>
+                            <a  href="/articles/chronicle/{{ article.chronicle_name }}/{{ article.slug }}" class="main__container-item-link">
+                                {% if article.photo != "0" %}
+                                    <img class="main__container-item-img" src='{{ article.photo }}'>
+                                {% endif %}
+                                <p class="main__container-item-text">
+                                    {{ article.title }}
+                                </p>
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            {% endfor %}
+        </div>
+
+        {% if photos|length >= 10 and chronicle_articles_list|length >= 5  %}
+            <ul class="main__container-media">
+                <h3 class="main__container-photo-title">ФОТОГАЛЕРЕИ</h3>
+                {% for photo in photos|slice:"10" %}
+                    <li class="main__container-media-item">
+                        <div>
+                            <a  href="/articles/photo/{{ photo.slug }}" class="main__container-media-item-link">
+                                <img class="main__container-media-item-img" src="{{ photo.photo }}">
+                                <p class="main__container-media-item-text">
+                                    {{ photo.title }}
+                                </p>
+                                </a>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <ul class="main__container-media">
+                <h3 class="main__container-photo-title">ФОТОГАЛЕРЕИ</h3>
+                {% for photo in photos|slice:"3" %}
+                    <li class="main__container-media-item">
+                        <div>
+                            <a  href="/articles/photo/{{ photo.slug }}" class="main__container-media-item-link">
+                                <img class="main__container-media-item-img" src="{{ photo.photo }}">
+                                <p class="main__container-media-item-text">
+                                    {{ photo.title }}
+                                </p>
+                                </a>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+      </div>
+
+        <div class="pagination">
+          {% if page_obj.has_previous %}
+            <h2 class="current">
+                <a class="page" href="?page=1">
+                    <p class="page__p"><<< ПЕРВАЯ</p>
+                </a>
+                <a class="page" href="?page={{ page_obj.previous_page_number }}">
+                    <p class="page__p">НАЗАД</p>
+                </a>
+            </h2>
+          {% endif %}
+            <h2 class="current">
+              Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+            </h2>
+          {% if page_obj.has_next %}
+            <h2 class="current">
+                <a class="page" href="?page={{ page_obj.next_page_number }}">
+                    <p class="page__p">СЛЕДУЮЩАЯ</p>
+                </a>
+                <a class="page" href="?page={{ page_obj.paginator.num_pages }}">
+                    <p class="page__p">ПОСЛЕДНЯЯ >>></p>
+                </a>
+            </h2>
+          {% endif %}
+        </div>
+        {% else %}
+            <p>Новостей нет</p>
+        {% endif %}
+
+  </div>
+
+{% endblock %}

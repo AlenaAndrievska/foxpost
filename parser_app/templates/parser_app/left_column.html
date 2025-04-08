@@ -1,0 +1,45 @@
+<div class="jumbotron">
+    <div class="container">
+        <div class="toplogo__left-column">
+			<table class="rates">
+              <tbody>
+                <tr>
+                  <td>USD</td>
+                  <td class="rate">
+                    {{ currency_object.dollar }}
+                  </td>
+                  <td>EUR</td>
+                  <td class="rate">
+                    {{ currency_object.euro }}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="rate_date">{{ currency_object.date|date:"d.m " }}</td>
+                  <td class="rate_p">
+                    <span class="m"> {{ currency_object.dollar_diff }}</span>
+                  </td><td class="rate_date">{{ currency_object.date|date:"d.m " }}</td>
+                  <td class="rate_p">
+                    <span class="m">{{ currency_object.euro_diff }}</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
+    </div>
+    <div>
+        {% if request.user.is_authenticated %}
+        <div class="currency_reg">
+            <a class="regist" href="/logout/">
+                <p class="regist__p">ВЫЙТИ</p>
+            </a>
+        {% else %}
+            <a class="regist" href="/login/">
+                <p class="regist__p">ВХОД</p>
+            </a>
+            <a class="regist" href="/register/">
+                <p class="regist__p">РЕГИСТРАЦИЯ</p>
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>

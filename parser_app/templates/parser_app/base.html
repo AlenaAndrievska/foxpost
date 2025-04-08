@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}FoxPost{% endblock %}</title>
+    <link rel="icon" type="image/png" href="{% static 'images/icon-fox.png' %}" >
+    <meta name="description" content="Описание страницы">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+        integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/media.css' %}">
+    <script src="{% static 'js/burger.js' %}"></script>
+</head>
+<body class="body">
+<header class="header">
+        {% include "parser_app/header.html" %}
+</header>
+<aside class="currency">
+    {% include "parser_app/left_column.html" %}
+</aside>
+
+<main>
+    {% block content %}{% endblock %}
+
+</main>
+
+<div>
+    {% include "parser_app/sign_up.html" %}
+</div>
+
+<footer class="footer">
+        {% include "parser_app/footer.html" %}
+</footer>
+
+
+</body>
+</html>

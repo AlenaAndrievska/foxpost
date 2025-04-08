@@ -1,0 +1,44 @@
+{% load static %}
+
+        <div class="bg-cover clearfix pt-3">
+            <div class="logo" >
+                <img src="{% static 'images/icon-fox.png' %}" class="ml-2 logo" alt="logo icon">
+                <h2 class="logo">
+                    Fox Post
+                </h2>
+            </div>
+            <div class="header__menu-320">
+                <button class="btn-reset burger" id="burger-button">
+                    <span class="burger__line"></span>
+                    <span class="burger__line"></span>
+                    <span class="burger__line"></span>
+                </button>
+                <nav class="nav nav-fill mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://facebook.com/fh5co" target="_blank"><i
+                            class="fab fa-facebook-f"></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://twitter.com/fh5co" target="_blank"><i
+                                class="fab fa-twitter"></i></a>
+                        </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fab fa-instagram"></i></a>
+                    </li>
+                </nav>
+            </div>
+
+            <div class="ml-0 mr-0 pb-1">
+                <nav class="navbar navbar-expand-md">
+                    <div id="my-nav">
+                        <ul class="navbar-nav mx-auto">
+                            {% for category in categories_list %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/articles/{{ category.slug }}">{{ category.name }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </div>

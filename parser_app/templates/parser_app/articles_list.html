@@ -1,0 +1,113 @@
+{% extends 'parser_app/base.html' %}
+
+{% block title%}FoxPost{% endblock %}
+
+{% block content %}
+
+<aside class="chronicle">
+    {% include "parser_app/chronicle.html" %}
+</aside>
+
+  <div class="container main__container">
+      <div class="jumbotron">
+        <h1 class="main__container-title">
+            Последние новости
+            <p class="main__container-category">{{ title }}</p>
+        </h1>
+      </div>
+
+      <div class="main__container-content">
+          {% if articles_list %}
+            <ul class="main__container-list">
+            {% for article in articles_list %}
+                <li>
+                    <div class="main__container-item">
+                        <div class="main__container-item-time">
+                            {% if article.name == "photo" %}
+                                <p class="main__container-item-date">{{ article.created_at|date:"Y.m.d" }}</p>
+                            {% else %}
+                                <p>{{ article.created_at|date:"H:i" }}</p>
+                                <p class="main__container-item-date">{{ article.created_at|date:"Y.m.d" }}</p>
+                            {% endif %}
+                        </div>
+                        <a  class="main__container-item-link" href="/articles/{{ article.name }}/{{ article.slug }}">
+                            {% if article.photo != "0" %}
+                                <img class="main__container-item-img" src='{{ article.photo }}'>
+                            {% endif %}
+                            <p class="main__container-item-text">
+                                {{ article.title }}
+                            </p>
+                        </a>
+                    </div>
+                </li>
+            {% endfor %}
+            </ul>
+          {% if photos|length >= 10 and articles_list|length >= 5  %}
+            <ul class="main__container-media">
+                <h3 class="main__container-photo-title">ФОТОГАЛЕРЕИ</h3>
+                {% for photo in photos|slice:"10" %}
+                    <li class="main__container-media-item">
+                        <div>
+                            <a  href="/articles/photo/{{ photo.slug }}" class="main__container-media-item-link">
+                                <img class="main__container-media-item-img" src="{{ photo.photo }}">
+                                <p class="main__container-media-item-text">
+                                    {{ photo.title }}
+                                </p>
+                                </a>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+          {% else %}
+            <ul class="main__container-media">
+                <h3 class="main__container-photo-title">ФОТОГАЛЕРЕИ</h3>
+                {% for photo in photos|slice:"3" %}
+                    <li class="main__container-media-item">
+                        <div>
+                            <a  href="/articles/photo/{{ photo.slug }}" class="main__container-media-item-link">
+                                <img class="main__container-media-item-img" src="{{ photo.photo }}">
+                                <p class="main__container-media-item-text">
+                                    {{ photo.title }}
+                                </p>
+                                </a>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+          {% endif %}
+
+      </div>
+
+      <div class="pagination">
+          {% if page_obj.has_previous %}
+            <h2 class="current">
+                <a class="page" href="?page=1">
+                    <p class="page__p"><<< ПЕРВАЯ</p>
+                </a>
+                <a class="page"href="?page={{ page_obj.previous_page_number }}">
+                    <p class="page__p">НАЗАД</p>
+                </a>
+            </h2>
+          {% endif %}
+            <h2 class="current" >
+              Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+            </h2>
+          {% if page_obj.has_next %}
+            <h2 class="current">
+                <a class="page" href="?page={{ page_obj.next_page_number }}">
+                    <p class="page__p">СЛЕДУЮЩАЯ</p>
+                </a>
+                <a class="page" href="?page={{ page_obj.paginator.num_pages }}">
+                    <p class="page__p">ПОСЛЕДНЯЯ >>></p>
+                </a>
+            </h2>
+          {% endif %}
+      </div>
+  {% else %}
+      <p>Новостей нет</p>
+  {% endif %}
+  </div>
+{% endblock %}
+
+
+

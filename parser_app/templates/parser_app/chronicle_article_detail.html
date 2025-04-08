@@ -1,0 +1,135 @@
+{% extends 'parser_app/base.html' %}
+{% load new_tags %}
+
+{% block title%}{{ article.chronicle }}{% endblock %}
+
+{% block content %}
+
+<div class="jumbotron article">
+  <h1 class="article__title">
+    {{ article.title }}
+  </h1>
+</div>
+
+<div class="container">
+  <h2 class="article__category">{{ article.category }}</h2>
+  <p class="article__datetime">{{ article.created_at|date:"H:i" }},&nbsp;{{ article.created_at|date:"d.m.Y" }}</p>
+  {% if article.photo != "0" %}
+    <img class="article__img" src='{{ article.photo }}'>
+  {% endif %}
+
+  <div class="article__text">
+  {% for part in article.description|split:"&" %}
+      <li class="article__tex-li">
+            {{ part }}
+      </li>
+  {% endfor %}
+  </div>
+
+  {% if articles_list %}
+    <h1 class="article__title-news">
+        НОВОСТИ ПО ТЕМЕ
+    </h1>
+    <div class="article__container">
+        <ul class="article__news">
+        {% if articles_list|length >= 3 %}
+            {% for a in articles_list|slice:":3" %}
+                {% if a != article %}
+                    <li>
+                        <div>
+                            <div class="article__news-datetime">
+                                <p>{{ a.created_at|date:"H:i" }}</p>
+                                <p>{{ a.created_at|date:"Y.m.d" }}</p>
+                            </div>
+                            <a  href="/articles/chronicle/{{ a.chronicle_name }}/{{ a.slug }}" class="main__container-item-link">
+                                {% if a.photo != "0" %}
+                                    <img class="main__container-item-img" src='{{ a.photo }}'>
+                                {% endif %}
+                                <p class="main__container-item-text">{{ a.title }}</p>
+                            </a>
+                        </div>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        </ul>
+        {% if photos|length >= 3 %}
+            <ul class="main__container-media">
+                <h3 class="main__container-photo-title">ФОТОГАЛЕРЕИ</h3>
+                {% for photo in photos|slice:":3" %}
+                    <li class="main__container-media-item">
+                        <div>
+                            <a  href="/articles/photo/{{ photo.slug }}" class="main__container-media-item-link">
+                                <img class="main__container-media-item-img" src="{{ photo.photo }}">
+                                <p class="main__container-media-item-text">
+                                    {{ photo.title }}
+                                </p>
+                            </a>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+
+    <h2 class="article__news-more">
+        <a class="article__news-more-link" href="/articles/chronicle/{{ article.chronicle_name  }}">
+            <p class="article__news-more-link-text">
+                <p class="article__news-more-link-text">БОЛЬШЕ НОВОСТЕЙ</p>
+            </p>
+        </a>
+    </h2>
+    {% else %}
+        <h2 class="article__news-more">
+            <p class="article__news-more-link">НОВОСТЕЙ ПОКА НЕТ</p>
+            <a class="article__news-more-link" href="/articles/">
+                <p class="article__news-more-link-text">ГЛАВНАЯ</p>
+            </a>
+        </h2>
+    {% endif %}
+</div>
+
+<div class="container-fluid jumbotron-fluid stay mt-5 pt-5 pb-5">
+    <div class="container">
+        {% if comments %}
+            <h2 class="article__news-more">
+                Комментарии
+            </h2>
+            <ul class="article__news">
+            {% for comment in comments %}
+                <li>
+                    <div class="article__comms">
+                        <div class="article__comms-time">
+                            <p>{{ comment.created_at|date:"H:i" }}</p>
+                            <p >{{ comment.created_at|date:"Y.m.d" }}</p>
+                        </div>
+                        <div>
+                            <p class="article__comms-author">{{ comment.user.username }}</p>
+                            <p class="article__comms-text">{{ comment.text }}</p>
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+        {% endif %}
+        {% if request.user.is_authenticated %}
+            <p class="article__comms-greed">{{ request.user.username }}, Вы можете оставить комментарий</p>
+            <div class="regist__input-group">
+                <form method="post" action="/articles/chronicle/{{ article.chronicle_name }}/{{ article.slug }}/">
+                    {% csrf_token %}
+                    <div class="input-group mt-4 mx-auto">
+                        {{ comment_form.text }}
+                    </div>
+                    <div class="">
+                        <button class="btn btn-success ml-2" type="submit">ОТПРАВИТЬ</button>
+                    </div>
+                </form>
+            </div>
+        {% else%}
+            <p class="text-center mt-2">Зарегестрируйтесь, чтобы оставлять комментарии</p>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
